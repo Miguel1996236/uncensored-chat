@@ -34,15 +34,15 @@ class Config {
     
     // Security
     public static function MAX_PROMPT_LENGTH(): int {
-        return (int) EnvLoader::get('MAX_PROMPT_LENGTH', 5000);
+        return (int) EnvLoader::get('MAX_PROMPT_LENGTH', 50000); // Aumentado a 50,000 caracteres
     }
     
     public static function MAX_SYSTEM_LENGTH(): int {
-        return (int) EnvLoader::get('MAX_SYSTEM_LENGTH', 1000);
+        return (int) EnvLoader::get('MAX_SYSTEM_LENGTH', 5000); // Aumentado a 5,000 caracteres
     }
     
     public static function MAX_INPUT_LENGTH(): int {
-        return (int) EnvLoader::get('MAX_INPUT_LENGTH', 10000);
+        return (int) EnvLoader::get('MAX_INPUT_LENGTH', 100000); // Aumentado a 100,000 caracteres
     }
     
     // Timeouts

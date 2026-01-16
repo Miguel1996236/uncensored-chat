@@ -46,8 +46,6 @@ function setupConfigSliders() {
     const sliders = {
         'temperature': 'temp-value',
         'top_p': 'top_p-value',
-        'top_k': 'top_k-value',
-        'num_predict': 'num_predict-value',
         'repeat_penalty': 'repeat_penalty-value'
     };
     
@@ -62,6 +60,26 @@ function setupConfigSliders() {
             });
         }
     });
+    
+    // Configurar num_predict (input number)
+    const numPredict = document.getElementById('num_predict');
+    const numPredictDisplay = document.getElementById('num_predict-value');
+    if (numPredict && numPredictDisplay) {
+        numPredictDisplay.textContent = numPredict.value;
+        numPredict.addEventListener('input', () => {
+            numPredictDisplay.textContent = numPredict.value;
+        });
+    }
+    
+    // Configurar top_k (input number)
+    const topK = document.getElementById('top_k');
+    const topKDisplay = document.getElementById('top_k-value');
+    if (topK && topKDisplay) {
+        topKDisplay.textContent = topK.value;
+        topK.addEventListener('input', () => {
+            topKDisplay.textContent = topK.value;
+        });
+    }
 }
 
 function updateSliderDisplay(slider, display) {
@@ -176,8 +194,12 @@ function getConfig(prompt) {
     }
     
     const numPredict = document.getElementById('num_predict').value;
-    if (numPredict && numPredict !== '2000') {
-        options.num_predict = parseInt(numPredict);
+    // Siempre enviar num_predict si está configurado (no solo si es diferente a 2000)
+    if (numPredict) {
+        const numPredictValue = parseInt(numPredict);
+        if (numPredictValue >= 100 && numPredictValue <= 32000) {
+            options.num_predict = numPredictValue;
+        }
     }
     
     const repeatPenalty = document.getElementById('repeat_penalty').value;

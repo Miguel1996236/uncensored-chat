@@ -80,6 +80,16 @@
                         </select>
                     </div>
 
+                    <div class="config-group">
+                        <label for="num_predict">
+                            Máximo de Tokens de Salida
+                            <span class="tooltip" data-tooltip="Longitud máxima de la respuesta generada. Valores más altos = respuestas más largas pero más lentas. ⚠️ Valores muy altos pueden ser lentos">ℹ️</span>
+                            <span class="value-display" id="num_predict-value">4000</span>
+                        </label>
+                        <input type="number" id="num_predict" min="100" max="32000" value="4000" step="100">
+                        <small>100-32000 tokens (recomendado: 2000-8000 para respuestas largas, 4000 por defecto)</small>
+                    </div>
+
                     <div class="config-advanced">
                         <button class="toggle-advanced" id="toggle-advanced">
                             🔧 Opciones Avanzadas
@@ -104,16 +114,6 @@
                                 </label>
                                 <input type="number" id="top_k" min="1" max="100" value="40">
                                 <small>1-100 (recomendado: 40)</small>
-                            </div>
-
-                            <div class="config-group">
-                                <label for="num_predict">
-                                    Máximo de Tokens
-                                    <span class="tooltip" data-tooltip="Longitud máxima de la respuesta generada">ℹ️</span>
-                                    <span class="value-display" id="num_predict-value"></span>
-                                </label>
-                                <input type="number" id="num_predict" min="1" max="2000" value="2000">
-                                <small>1-2000</small>
                             </div>
 
                             <div class="config-group">
@@ -184,10 +184,10 @@
                             id="chat-input" 
                             placeholder="Escribe tu mensaje aquí..." 
                             rows="3"
-                            maxlength="5000"
+                            maxlength="50000"
                         ></textarea>
                         <div class="input-footer">
-                            <span class="char-count"><span id="char-count">0</span>/5000</span>
+                            <span class="char-count"><span id="char-count">0</span>/50000</span>
                             <button class="btn-send" id="send-btn">
                                 <span>Enviar</span>
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
