@@ -9,20 +9,64 @@ require_once __DIR__ . '/../config.php';
 class ApiService {
     private string $apiUrl;
     private int $timeout;
+    private int $maxRetries;
+    private int $retryDelay;
     
-    public function __construct(string $apiUrl = Config::API_URL, int $timeout = Config::CURL_TIMEOUT) {
-        $this->apiUrl = $apiUrl;
-        $this->timeout = $timeout;
+    public function __construct(?string $apiUrl = null, ?int $timeout = null, int $maxRetries = 3, int $retryDelay = 1) {
+        $this->apiUrl = $apiUrl ?? Config::API_URL() ?? 'http://46.4.122.18:11434/api/generate';
+        $this->timeout = $timeout ?? Config::CURL_TIMEOUT() ?? 120;
+        $this->maxRetries = $maxRetries;
+        $this->retryDelay = $retryDelay;
+        
+        // Validar que apiUrl no sea null o vacío
+        if (empty($this->apiUrl)) {
+            throw new InvalidArgumentException('API URL no puede estar vacía');
+        }
     }
     
     /**
-     * Genera una respuesta del modelo
+     * Genera una respuesta del modelo con retry automático
+     * 
+     * @param array $params Parámetros validados
+     * @return array Respuesta de la API
+     * @throws Exception Si hay error en la petición después de todos los reintentos
+     */
+    public function generate(array $params): array {
+        $lastException = null;
+        
+        for ($attempt = 1; $attempt <= $this->maxRetries; $attempt++) {
+            try {
+                return $this->makeRequest($params);
+            } catch (Exception $e) {
+                $lastException = $e;
+                
+                // No reintentar en errores de validación o 4xx
+                if (strpos($e->getMessage(), 'Error HTTP 4') !== false) {
+                    throw $e;
+                }
+                
+                // Si es el último intento, lanzar la excepción
+                if ($attempt === $this->maxRetries) {
+                    break;
+                }
+                
+                // Backoff exponencial: 1s, 2s, 4s...
+                $delay = $this->retryDelay * pow(2, $attempt - 1);
+                usleep($delay * 1000000); // Convertir a microsegundos
+            }
+        }
+        
+        throw $lastException ?? new Exception('Error desconocido en la petición');
+    }
+    
+    /**
+     * Realiza la petición HTTP
      * 
      * @param array $params Parámetros validados
      * @return array Respuesta de la API
      * @throws Exception Si hay error en la petición
      */
-    public function generate(array $params): array {
+    private function makeRequest(array $params): array {
         $ch = curl_init();
         
         $postData = json_encode($params, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);

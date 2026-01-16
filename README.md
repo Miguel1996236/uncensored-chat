@@ -82,7 +82,16 @@ uncensored-chat/
 1. Clona o copia el proyecto en tu servidor web (XAMPP, WAMP, etc.)
 2. Asegúrate de que PHP 8.1+ esté instalado
 3. Verifica que la extensión `curl` esté habilitada
-4. Accede a `http://localhost/uncensored-chat/`
+4. **IMPORTANTE**: Copia `env.example.txt` a `.env` (o créalo manualmente) y ajusta los valores
+5. Asegúrate de que el directorio `storage/` tenga permisos de escritura
+6. Accede a `http://localhost/uncensored-chat/`
+
+### Solución de Error 500
+
+Si encuentras un error 500:
+- Verifica que el directorio `storage/` y sus subdirectorios existan y tengan permisos de escritura
+- Asegúrate de que el archivo `.env` exista (puedes copiarlo desde `env.example.txt`)
+- Revisa los logs de error de PHP en `storage/logs/` o en los logs de Apache
 
 ## 📝 Uso
 

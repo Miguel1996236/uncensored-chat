@@ -89,17 +89,48 @@ async function handleSend() {
     isProcessing = true;
     sendBtn.disabled = true;
     
+    const startTime = Date.now();
+    
     try {
         const config = getConfig(prompt);
         const response = await fetchAPI(config);
         
+        const duration = Date.now() - startTime;
+        const tokens = response.eval_count || 0;
+        
         removeMessage(loadingId);
-        addMessage('assistant', response.response || 'Sin respuesta');
+        addMessage('assistant', response.response || 'Sin respuesta', false, {
+            duration,
+            tokens,
+            model: config.model
+        });
+        
+        // Actualizar indicador de estado
+        if (window.chatFeatures) {
+            const speed = tokens > 0 ? (tokens / (duration / 1000)).toFixed(1) : 'N/A';
+            window.chatFeatures.updateStatusIndicator(
+                `✓ Completado en ${(duration/1000).toFixed(1)}s | ${tokens} tokens | ${speed} tok/s`
+            );
+            
+            // Track analytics
+            if (window.chatFeatures.trackRequest) {
+                window.chatFeatures.trackRequest(duration, tokens, false);
+            }
+        }
         
         saveChatHistory();
     } catch (error) {
+        const duration = Date.now() - startTime;
         removeMessage(loadingId);
         addMessage('assistant', `❌ Error: ${error.message}`, true);
+        
+        if (window.chatFeatures) {
+            window.chatFeatures.updateStatusIndicator(`✗ Error después de ${(duration/1000).toFixed(1)}s`);
+            if (window.chatFeatures.trackRequest) {
+                window.chatFeatures.trackRequest(duration, 0, true);
+            }
+        }
+        
         console.error('Error:', error);
     } finally {
         isProcessing = false;
@@ -197,17 +228,41 @@ async function fetchAPI(config) {
     });
     
     if (!response.ok) {
-        const error = await response.json().catch(() => ({ error: 'Error desconocido' }));
-        throw new Error(error.error || `Error HTTP: ${response.status}`);
+        // Intentar obtener el error como JSON, si falla obtener como texto
+        let errorMessage = `Error HTTP: ${response.status}`;
+        try {
+            const errorData = await response.json();
+            errorMessage = errorData.error || errorMessage;
+        } catch (e) {
+            const errorText = await response.text();
+            errorMessage = errorText || errorMessage;
+        }
+        throw new Error(errorMessage);
     }
     
-    return await response.json();
+    // Obtener la respuesta como texto primero para debug
+    const responseText = await response.text();
+    
+    // Verificar que sea JSON válido
+    if (!responseText.trim().startsWith('{') && !responseText.trim().startsWith('[')) {
+        console.error('Response is not JSON:', responseText.substring(0, 200));
+        throw new Error('La respuesta del servidor no es JSON válido. Respuesta: ' + responseText.substring(0, 200));
+    }
+    
+    try {
+        return JSON.parse(responseText);
+    } catch (e) {
+        console.error('JSON Parse Error:', e);
+        console.error('Response text:', responseText.substring(0, 500));
+        throw new Error('Error al parsear JSON: ' + e.message + '. Respuesta: ' + responseText.substring(0, 200));
+    }
 }
 
 // Agregar mensaje
-function addMessage(type, content, isError = false) {
+function addMessage(type, content, isError = false, metadata = {}) {
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${type}${isError ? ' error' : ''}`;
+    messageDiv.dataset.timestamp = new Date().toISOString();
     
     const contentDiv = document.createElement('div');
     contentDiv.className = 'message-content';
@@ -219,11 +274,54 @@ function addMessage(type, content, isError = false) {
         } else {
             contentDiv.textContent = content;
         }
+        
+        // Agregar botón copiar
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'btn-copy';
+        copyBtn.innerHTML = '📋';
+        copyBtn.title = 'Copiar respuesta';
+        copyBtn.style.cssText = `
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0,0,0,0.1);
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+        `;
+        copyBtn.onclick = (e) => {
+            e.stopPropagation();
+            if (window.chatFeatures) {
+                window.chatFeatures.copyToClipboard(content);
+            }
+        };
+        messageDiv.style.position = 'relative';
+        messageDiv.appendChild(copyBtn);
+        
+        messageDiv.onmouseenter = () => copyBtn.style.opacity = '1';
+        messageDiv.onmouseleave = () => copyBtn.style.opacity = '0';
     } else {
         contentDiv.textContent = content;
     }
     
+    // Agregar timestamp
+    const timestamp = document.createElement('div');
+    timestamp.className = 'message-timestamp';
+    timestamp.textContent = new Date().toLocaleTimeString();
+    timestamp.style.cssText = `
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-top: 8px;
+        opacity: 0.7;
+    `;
+    
     messageDiv.appendChild(contentDiv);
+    if (type === 'assistant' || type === 'user') {
+        messageDiv.appendChild(timestamp);
+    }
     chatMessages.appendChild(messageDiv);
     
     // Remover mensaje de bienvenida si existe

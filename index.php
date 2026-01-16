@@ -144,6 +144,28 @@
                     </div>
 
                     <button class="btn-clear" id="clear-chat">🗑️ Limpiar Chat</button>
+                    
+                    <div class="config-group" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+                        <label>Plantillas de Prompts</label>
+                        <select id="prompt-template" onchange="if(this.value) window.chatFeatures.loadPromptTemplate(this.value); this.value='';">
+                            <option value="">Seleccionar plantilla...</option>
+                            <option value="Científico">Científico</option>
+                            <option value="Programador">Programador</option>
+                            <option value="Escritor">Escritor</option>
+                            <option value="Traductor">Traductor</option>
+                            <option value="Analista">Analista</option>
+                        </select>
+                    </div>
+                    
+                    <div class="config-group">
+                        <button class="btn-export" onclick="window.chatFeatures.exportChat('json')" style="width: 100%; margin-bottom: 8px; padding: 10px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); cursor: pointer;">📥 Exportar JSON</button>
+                        <button class="btn-export" onclick="window.chatFeatures.exportChat('txt')" style="width: 100%; margin-bottom: 8px; padding: 10px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); cursor: pointer;">📄 Exportar TXT</button>
+                        <button class="btn-export" onclick="window.chatFeatures.exportChat('md')" style="width: 100%; margin-bottom: 8px; padding: 10px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); cursor: pointer;">📝 Exportar Markdown</button>
+                    </div>
+                    
+                    <div class="config-group">
+                        <button class="btn-theme" onclick="window.chatFeatures.toggleTheme()" style="width: 100%; padding: 10px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); cursor: pointer;">🌓 Cambiar Tema</button>
+                    </div>
                 </div>
             </aside>
 
@@ -181,6 +203,15 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="js/features.js"></script>
     <script src="js/chat.js"></script>
+    <script>
+        // Inicializar funcionalidades adicionales
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.chatFeatures) {
+                window.chatFeatures.initFeatures();
+            }
+        });
+    </script>
 </body>
 </html>

@@ -5,23 +5,15 @@
     Header set X-Content-Type-Options "nosniff"
     Header set X-Frame-Options "SAMEORIGIN"
     Header set Referrer-Policy "strict-origin-when-cross-origin"
-    
-    # CSP básico
-    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self';"
 </IfModule>
 
 # Deshabilitar listado de directorios
 Options -Indexes
 
-# Proteger archivos sensibles
+# Proteger archivos sensibles (sintaxis Apache 2.4)
 <FilesMatch "\.(htaccess|htpasswd|ini|log|sh|sql)$">
-    Order Allow,Deny
-    Deny from all
+    Require all denied
 </FilesMatch>
-
-# Limitar tamaño de peticiones POST
-php_value post_max_size 10M
-php_value upload_max_filesize 10M
 
 # Habilitar compresión
 <IfModule mod_deflate.c>

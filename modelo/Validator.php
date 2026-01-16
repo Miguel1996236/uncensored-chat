@@ -12,7 +12,7 @@ class Validator {
      */
     public static function validatePrompt(string $prompt): string {
         // Validar longitud
-        if (strlen($prompt) > Config::MAX_PROMPT_LENGTH) {
+        if (strlen($prompt) > Config::MAX_PROMPT_LENGTH()) {
             throw new InvalidArgumentException('El prompt excede la longitud máxima permitida');
         }
         
@@ -37,7 +37,7 @@ class Validator {
             return null;
         }
         
-        if (strlen($system) > Config::MAX_SYSTEM_LENGTH) {
+        if (strlen($system) > Config::MAX_SYSTEM_LENGTH()) {
             throw new InvalidArgumentException('El system prompt excede la longitud máxima permitida');
         }
         

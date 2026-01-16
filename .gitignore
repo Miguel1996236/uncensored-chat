@@ -1,0 +1,34 @@
+# Archivos de entorno
+.env
+.env.local
+.env.*.local
+
+# Directorio de storage (logs, cache, etc.)
+/storage/logs/*
+/storage/cache/*
+/storage/rate_limit/*
+!/storage/.gitkeep
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos temporales
+*.tmp
+*.log
+*.cache
+
+# Composer
+/vendor/
+
+# Node modules (si se agregan)
+/node_modules/
