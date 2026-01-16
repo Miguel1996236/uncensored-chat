@@ -109,10 +109,11 @@ async function handleSend() {
 
 // Obtener configuración
 function getConfig(prompt) {
+    const streamValue = document.getElementById('stream').checked;
     const config = {
         model: document.getElementById('model').value || 'llama2-uncensored',
         prompt: prompt || getLastUserMessage(),
-        stream: document.getElementById('stream').checked,
+        stream: streamValue, // Asegurar que siempre se envíe (true o false)
     };
     
     const system = document.getElementById('system').value.trim();

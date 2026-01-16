@@ -12,8 +12,30 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1>🤖 Chat Uncensored</h1>
-            <p class="subtitle">Asistente de IA con configuración avanzada</p>
+            <div class="header-content">
+                <div class="robot-logo">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Fondo azul del logo -->
+                        <rect width="60" height="60" rx="8" fill="#3b82f6"/>
+                        <!-- Cuerpo del robot -->
+                        <rect x="12" y="20" width="36" height="28" rx="4" fill="#f8fafc"/>
+                        <!-- Ojos azules -->
+                        <circle cx="22" cy="32" r="3" fill="#3b82f6"/>
+                        <circle cx="38" cy="32" r="3" fill="#3b82f6"/>
+                        <!-- Boca -->
+                        <rect x="26" y="38" width="8" height="2" rx="1" fill="#1e293b"/>
+                        <!-- Antenas rosas -->
+                        <circle cx="24" cy="16" r="2.5" fill="#ec4899"/>
+                        <circle cx="36" cy="16" r="2.5" fill="#ec4899"/>
+                        <!-- Gorra amarilla -->
+                        <path d="M18 20 L30 14 L42 20 L42 18 L18 18 Z" fill="#fbbf24"/>
+                    </svg>
+                </div>
+                <div class="header-text">
+                    <h1>Chat Uncensored</h1>
+                    <p class="subtitle">Asistente de IA con configuración avanzada</p>
+                </div>
+            </div>
         </header>
 
         <div class="main-content">
@@ -39,7 +61,7 @@
 
                     <div class="config-group">
                         <label for="stream">
-                            <input type="checkbox" id="stream" checked>
+                            <input type="checkbox" id="stream">
                             Modo Stream
                             <span class="tooltip" data-tooltip="Muestra la respuesta mientras se genera (más rápido visualmente)">ℹ️</span>
                         </label>

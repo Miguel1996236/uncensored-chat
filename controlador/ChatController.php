@@ -88,10 +88,15 @@ class ChatController {
             
         } catch (InvalidArgumentException $e) {
             http_response_code(400);
-            echo json_encode(['error' => $e->getMessage()]);
+            echo json_encode(['error' => $e->getMessage()], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             http_response_code(500);
-            echo json_encode(['error' => 'Error interno: ' . $e->getMessage()]);
+            // En desarrollo, mostrar más detalles del error
+            $errorMessage = $e->getMessage();
+            if (defined('DEBUG') && DEBUG) {
+                $errorMessage .= ' | Archivo: ' . $e->getFile() . ' | Línea: ' . $e->getLine();
+            }
+            echo json_encode(['error' => 'Error interno: ' . $errorMessage], JSON_UNESCAPED_UNICODE);
         }
     }
 }

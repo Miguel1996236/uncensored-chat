@@ -21,4 +21,12 @@ class Config {
     
     // Allowed HTML tags for markdown rendering (sanitized)
     public const ALLOWED_HTML_TAGS = '<p><br><strong><em><code><pre><ul><ol><li><h1><h2><h3><h4><h5><h6><blockquote><a>';
+    
+    // Debug mode (cambiar a false en producción)
+    public const DEBUG = true;
+}
+
+// Definir constante global para compatibilidad
+if (!defined('DEBUG')) {
+    define('DEBUG', Config::DEBUG);
 }
