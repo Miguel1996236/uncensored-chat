@@ -62,7 +62,8 @@ body {
 }
 
 .robot-logo svg {
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    opacity: 0.85;
+    filter: none;
 }
 
 .header-text {

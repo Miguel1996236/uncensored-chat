@@ -15,20 +15,19 @@
             <div class="header-content">
                 <div class="robot-logo">
                     <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Fondo azul del logo -->
-                        <rect width="60" height="60" rx="8" fill="#3b82f6"/>
-                        <!-- Cuerpo del robot -->
-                        <rect x="12" y="20" width="36" height="28" rx="4" fill="#f8fafc"/>
-                        <!-- Ojos azules -->
-                        <circle cx="22" cy="32" r="3" fill="#3b82f6"/>
-                        <circle cx="38" cy="32" r="3" fill="#3b82f6"/>
-                        <!-- Boca -->
-                        <rect x="26" y="38" width="8" height="2" rx="1" fill="#1e293b"/>
-                        <!-- Antenas rosas -->
-                        <circle cx="24" cy="16" r="2.5" fill="#ec4899"/>
-                        <circle cx="36" cy="16" r="2.5" fill="#ec4899"/>
-                        <!-- Gorra amarilla -->
-                        <path d="M18 20 L30 14 L42 20 L42 18 L18 18 Z" fill="#fbbf24"/>
+                        <!-- Fondo gris modo incógnito -->
+                        <rect width="60" height="60" rx="8" fill="#5f6368"/>
+                        <!-- Cabeza del robot (blanca) -->
+                        <rect x="15" y="22" width="30" height="24" rx="3" fill="#ffffff"/>
+                        <!-- Ojos grises -->
+                        <circle cx="24" cy="32" r="2.5" fill="#5f6368"/>
+                        <circle cx="36" cy="32" r="2.5" fill="#5f6368"/>
+                        <!-- Boca negra -->
+                        <rect x="26" y="38" width="8" height="2" rx="1" fill="#202124"/>
+                        <!-- Sombrero negro -->
+                        <ellipse cx="30" cy="18" rx="12" ry="3" fill="#1e293b"/>
+                        <rect x="20" y="18" width="20" height="4" rx="2" fill="#1e293b"/>
+                        
                     </svg>
                 </div>
                 <div class="header-text">
